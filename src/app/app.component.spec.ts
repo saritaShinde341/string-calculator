@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TestBed } from '@angular/core/testing';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -26,10 +26,43 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('string-calculator');
   });
 
-  it('should render title', () => {
+  it('should print sum 0 for an empty string', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('string-calculator app is running!');
+    const app = fixture.componentInstance;
+    app.inputString = '';
+    app.add();
+    expect(app.sum).toBe(0);
   });
+
+  it('should print sum even though \\n is in string', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    app.inputString = '1\\n2,3';
+    app.add();
+    expect(app.sum).toBe(6);
+  });
+  it('should print sum', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    app.inputString = '1,2,3';
+    app.add();
+    expect(app.sum).toBe(6);
+  });
+
+  it('should handle different delimiter and return sum', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    app.inputString = '//;\n1;2;3';
+    app.add();
+    expect(app.sum).toBe(6);
+  });
+
+  it('should print all negative numbers', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    app.inputString = '-1,2,3,-4';
+    app.add();
+    expect(app.response).toBe("Negative numbers are not allowed: -1,-4");
+  });
+
 });
